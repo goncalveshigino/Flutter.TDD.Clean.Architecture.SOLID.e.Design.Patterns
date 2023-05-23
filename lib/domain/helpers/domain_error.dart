@@ -1,5 +1,6 @@
 
 
 enum DomainError {
-  unexpected
+  unexpected, 
+  invalidCredetials
 }
