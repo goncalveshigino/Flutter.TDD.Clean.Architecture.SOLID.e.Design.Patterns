@@ -4,6 +4,7 @@ import 'package:test/test.dart';
 import 'package:meta/meta.dart';
 
 import 'package:fordev/domain/usecases/authentication.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
 
 import 'package:fordev/data/usecases/usecases.dart';
 import 'package:fordev/data/http/http.dart';
@@ -15,6 +16,7 @@ import 'package:fordev/data/http/http.dart';
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
+
   RemoteAuthentication sut;
   HttpClient httpClient;
   String url;
@@ -40,4 +42,18 @@ void main() {
       }
       ));
   });
+
+
+   test('should throw UnexpectedError if HttpClient return 400', () async {
+    when(httpClient.request(url: anyNamed('url'), method: anyNamed('method'), body: anyNamed('body')))
+       .thenThrow(HttpError.badRequest);
+  
+    final params = AuthenticationParams( email: faker.internet.email(), password: faker.internet.password() );
+
+    final future = sut.auth( params );
+
+     expect(future, throwsA(DomainError.unexpected));
+  });
+
+
 }
