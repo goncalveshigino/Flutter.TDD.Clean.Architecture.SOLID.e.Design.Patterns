@@ -8,19 +8,21 @@ import '../http/http.dart';
 import '../models/model.dart';
 
 class RemoteAuthentication {
+
   final HttpClient httpClient;
   final String url;
 
   RemoteAuthentication({@required this.httpClient, @required this.url});
 
-  Future<AccountEntity> auth(AuthenticationParams params) async {
+  Future<AccountEntity>auth(AuthenticationParams params) async {
     final body = RemoteAuthenticationParams.fromDomain(params).toJson();
 
     try {
-      final httpResponse =
-          await httpClient.request(url: url, method: 'post', body: body);
-      return RemoteAccountModel.fromJson(httpResponse).toEntity();
       
+      final httpResponse = await httpClient.request(url: url,method: 'post', body: body);
+
+      return RemoteAccountModel.fromJson(httpResponse).toEntity();
+
     } on HttpError catch (error) {
       throw error == HttpError.unauthorized
           ? DomainError.invalidCredetials
