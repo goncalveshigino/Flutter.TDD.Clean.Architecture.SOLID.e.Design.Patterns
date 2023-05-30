@@ -2,34 +2,15 @@ import 'dart:convert';
 
 import 'package:faker/faker.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
+
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:meta/meta.dart';
 
-import 'package:fordev/data/http/http_client.dart';
+import 'package:fordev/data/http/http.dart';
+import 'package:fordev/infrastructure/http/http.dart';
 
-class HttpAdapter implements HttpClient {
-  final http.Client client;
 
-  HttpAdapter(this.client);
 
-  Future<Map> request(
-      {@required String url, @required String method, Map body}) async {
-    final headers = {
-      'content-type': 'appplication/json',
-      'accept': 'application/json'
-    };
-    final jsonBody = body != null ? jsonEncode(body) : null;
-    final response = await client.post(Uri.parse(url), headers: headers, body: jsonBody);
-    if( response.statusCode == 200){
-       return response.body.isEmpty ? null : jsonDecode(response.body);
-    } else {
-      return null;
-    }
-  
-  }
-}
 
 class ClientSpy extends Mock implements http.Client {}
 
@@ -49,7 +30,7 @@ void main() {
 
     void mockResponse(int statusCode,
         {String body = ' {"any_key":"any_value"}'}) {
-      mockRequest().thenAnswer((_) async => Response(body, statusCode));
+      mockRequest().thenAnswer((_) async => http.Response(body, statusCode));
     }
 
     setUp(() {
@@ -106,6 +87,23 @@ void main() {
       final response = await sut.request(url: url, method: 'post');
 
       expect(response, null);
+    });
+
+    test('Should return BadRequestError if post returns 400', () async {
+      mockResponse(400);
+
+      final response =  sut.request(url: url, method: 'post');
+
+      expect(response, throwsA(HttpError.badRequest));
+    });
+
+
+    test('Should return BadRequestError if post returns 400', () async {
+      mockResponse(400, body: '');
+
+      final response =  sut.request(url: url, method: 'post');
+
+      expect(response, throwsA(HttpError.badRequest));
     });
 
 
