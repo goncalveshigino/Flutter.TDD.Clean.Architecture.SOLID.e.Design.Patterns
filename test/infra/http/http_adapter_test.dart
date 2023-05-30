@@ -24,6 +24,18 @@ void main() {
     sut = HttpAdapter(client);
     url = faker.internet.httpUrl();
   });
+
+  group('shared',(){
+   
+   test('Should throw ServerError if invalid method is provided ', () async {
+      
+     final future =  sut.request(url: url, method: 'invalid_method');
+     
+     expect(future, throwsA(HttpError.serverError));
+      
+    });
+
+  });
   group('post', () {
     PostExpectation mockRequest() => when(
         client.post(any, body: anyNamed('body'), headers: anyNamed('headers')));
@@ -123,17 +135,22 @@ void main() {
       expect(response, throwsA(HttpError.forbidden));
     });
 
+    test('Should return NotFoundError if post returns 404', () async {
+      mockResponse(404);
+
+      final response =  sut.request(url: url, method: 'post');
+
+      expect(response, throwsA(HttpError.notFound));
+    });
+
 
     test('Should return ServerError if post returns 500', () async {
       mockResponse(500);
 
       final response =  sut.request(url: url, method: 'post');
 
-      expect(response, throwsA(HttpError.badRequest));
+      expect(response, throwsA(HttpError.serverError));
     });
-
-
-    
 
 
   });
