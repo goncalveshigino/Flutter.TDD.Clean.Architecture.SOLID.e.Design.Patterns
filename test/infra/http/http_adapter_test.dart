@@ -45,6 +45,10 @@ void main() {
       mockRequest().thenAnswer((_) async => http.Response(body, statusCode));
     }
 
+    void mockError(){
+      mockRequest().thenThrow(Exception());
+    }
+
     setUp(() {
       mockResponse(200);
     });
@@ -152,6 +156,16 @@ void main() {
       expect(response, throwsA(HttpError.serverError));
     });
 
+     test('Should return ServerError if post throws', () async {
+      mockError();
+
+      final response =  sut.request(url: url, method: 'post');
+
+      expect(response, throwsA(HttpError.serverError));
+    });
+
 
   });
+
+
 }
