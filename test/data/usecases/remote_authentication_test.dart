@@ -12,12 +12,12 @@ import 'package:fordev/data/http/http.dart';
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
+
   RemoteAuthentication sut;
   HttpClient httpClient;
   String url;
   AuthenticationParams params;
-  Map mockValidData() =>
-      {'accessToken': faker.guid.guid(), 'name': faker.person.name()};
+  Map mockValidData() => {'accessToken': faker.guid.guid(), 'name': faker.person.name()};
   PostExpectation mockRequest() {
     return when(httpClient.request(
         url: anyNamed('url'),
@@ -43,6 +43,7 @@ void main() {
   });
 
   test('should call HttpClient with correct values', () async {
+
     await sut.auth(params);
 
     verify(httpClient.request(
