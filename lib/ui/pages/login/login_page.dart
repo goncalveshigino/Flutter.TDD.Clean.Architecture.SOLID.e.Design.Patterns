@@ -62,7 +62,15 @@ LoginPage(this.presenter);
                        ),
                      ),
              
-                    ElevatedButton(onPressed: null, child: Text('Entrar'.toUpperCase())),
+                    StreamBuilder<bool>(
+                      stream: presenter.isFormValidStream,
+                      builder: (context, snapshot) {
+                        return ElevatedButton(
+                          onPressed: snapshot.data == true ? (){} : null, 
+                          child: Text('Entrar'.toUpperCase()),
+                        );
+                      }
+                    ),
                  
                     TextButton.icon(onPressed: (){}, icon:  Icon( Icons.person, color: Theme.of(context).primaryColorLight ), label:  Text('Criar conta', style: TextStyle( color: Theme.of(context).primaryColorLight)))
                   ],
