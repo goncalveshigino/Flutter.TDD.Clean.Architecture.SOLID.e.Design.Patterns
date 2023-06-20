@@ -21,7 +21,7 @@ void main() {
 
     passwordErrorController = StreamController<String>();
     when( presenter.passwordErrorStream ).thenAnswer((_) => passwordErrorController.stream);
-    
+
     final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
   }
@@ -103,6 +103,29 @@ void main() {
     await tester.pump();
 
     expect(find.text('any error'), findsOneWidget );
+  });
+
+
+   testWidgets('should present no error if password is valid', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    passwordErrorController.add(null);
+    await tester.pump();
+
+    expect(find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)), 
+    findsOneWidget 
+    );
+  });
+
+   testWidgets('should present no error if email is valid', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    passwordErrorController.add('');
+    await tester.pump();
+
+    expect(find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)), 
+    findsOneWidget 
+    );
   });
 
 }
