@@ -66,7 +66,7 @@ LoginPage(this.presenter);
                       stream: presenter.isFormValidStream,
                       builder: (context, snapshot) {
                         return ElevatedButton(
-                          onPressed: snapshot.data == true ? (){} : null, 
+                          onPressed: snapshot.data == true ? presenter.auth : null, 
                           child: Text('Entrar'.toUpperCase()),
                         );
                       }
