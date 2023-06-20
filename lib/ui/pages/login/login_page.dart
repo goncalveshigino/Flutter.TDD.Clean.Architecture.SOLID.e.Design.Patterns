@@ -46,14 +46,20 @@ LoginPage(this.presenter);
                  
                      Padding(
                        padding:  const EdgeInsets.only(top: 8.0, bottom: 32.0),
-                       child: TextFormField(
-                        decoration:  InputDecoration(
-                          labelText: 'Senha', 
-                          icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight), 
-                        ),
-                        obscureText: true,
-                        onChanged: presenter.validatePassword,
-                                         ),
+                       child: StreamBuilder<String>(
+                         stream: presenter.passwordErrorStream,
+                         builder: (context, snapshot) {
+                           return TextFormField(
+                            decoration:  InputDecoration(
+                              labelText: 'Senha', 
+                              icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight), 
+                              errorText:  snapshot.data?.isEmpty == true ? null : snapshot.data,
+                            ),
+                            obscureText: true,
+                            onChanged: presenter.validatePassword,
+                                             );
+                         }
+                       ),
                      ),
              
                     ElevatedButton(onPressed: null, child: Text('Entrar'.toUpperCase())),
