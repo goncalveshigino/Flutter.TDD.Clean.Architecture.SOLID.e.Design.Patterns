@@ -32,6 +32,10 @@ const LoginPage(this.presenter, {Key key}) : super(key: key);
                   );
                 }
               );
+            }else{
+              if(Navigator.canPop(context)){
+                Navigator.of(context).pop();
+              }
             }
          });
 
