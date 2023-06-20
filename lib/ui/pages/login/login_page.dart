@@ -39,6 +39,17 @@ const LoginPage(this.presenter, {Key key}) : super(key: key);
             }
          });
 
+         presenter.mainErrorStream.listen((error){
+          if (error != null){
+             ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.red[900],
+                content: Text(error, textAlign: TextAlign.center,)
+              )
+             );
+          }
+         });
+
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
