@@ -26,6 +26,7 @@ void main() {
   }
 
   void mockStreams(){
+    
      when(presenter.emailErrorStream)
         .thenAnswer((_) => emailErrorController.stream);
     when(presenter.passwordErrorStream)
