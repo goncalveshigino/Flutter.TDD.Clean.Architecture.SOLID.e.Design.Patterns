@@ -34,13 +34,11 @@ void main() {
   });
 
 //Testando uma Stream
-  test('Should call Validation with correct email', () {
+  test('Should emit email error if validation fails', () {
     mockValidation(value: 'error');
 
-    sut.emailErrorStream
-        .listen(expectAsync1((error) => expect(error, 'error')));
-    sut.isFormValidStream
-        .listen(expectAsync1((isValid) => expect(isValid, false)));
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validateEmail(email);
     sut.validateEmail(email);
@@ -55,9 +53,24 @@ void main() {
     sut.validateEmail(email);
   });
 
+
   test('Should call Validation with correct Password', () {
     sut.validatePassword(password);
 
     verify(validation.validate(field: 'password', value: password)).called(1);
   });
+
+  
+
+   test('Should emit password error if validation fails', () {
+    mockValidation(value: 'error');
+
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
+
+
 }
