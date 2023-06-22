@@ -1,11 +1,14 @@
 import 'package:faker/faker.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+
 import 'package:fordev/domain/entities/entities.dart';
 import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:fordev/domain/usecases/authentication.dart';
+
 import 'package:fordev/presentation/presenters/presenters.dart';
 import 'package:fordev/presentation/protocols/validation.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+
 
 class ValidationSpy extends Mock implements Validation {}
 class AuthenticationSpy extends Mock implements Authentication{}
@@ -151,7 +154,7 @@ void main() {
 
 
 
-   test('Should emit correct events on InvalidCredentialsError', () async {
+  test('Should emit correct events on InvalidCredentialsError', () async {
     mockAuthenticationError(DomainError.invalidCredetials);
     sut.validateEmail(email);
     sut.validatePassword(password);
@@ -165,14 +168,18 @@ void main() {
 
 
 
-  // test('Should emit correct events on Authentication success', () async {
-  //   sut.validateEmail(email);
-  //   sut.validatePassword(password);
+  test('Should emit correct events on InvalidCredentialsError', () async {
+    mockAuthenticationError(DomainError.unexpected);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    
 
-  //   expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
-  //   sut.mainErrorStream.listen(expectAsync1((error) => expect(error, 'Credenciais invalidas')));
+    expectLater(sut.isLoadingStream, emits(false));
+    sut.mainErrorStream.listen(expectAsync1((error) => expect(error, 'Algo errado aconteceu tente novamente em breve.')));
 
-  //   await sut.auth();
-  // });
+    await sut.auth();
+  });
+
+
 
 }
