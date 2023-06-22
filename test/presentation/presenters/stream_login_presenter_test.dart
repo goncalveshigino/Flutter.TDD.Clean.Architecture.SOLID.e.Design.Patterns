@@ -62,10 +62,20 @@ void main() {
 
   
 
-   test('Should emit password error if validation fails', () {
+  test('Should emit password error if validation fails', () {
     mockValidation(value: 'error');
 
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validatePassword(password);
+    sut.validatePassword(password);
+  });
+
+
+  test('Should emit password error if validation fails', () {
+
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validatePassword(password);
