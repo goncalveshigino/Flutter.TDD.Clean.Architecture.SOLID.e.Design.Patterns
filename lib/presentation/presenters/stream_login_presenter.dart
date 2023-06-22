@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import '../protocols/protocols.dart';
 
 class LoginState {
+
   String email;
   String password;
   String emailError;
@@ -22,7 +23,7 @@ class StreamLoginPresenter {
   var _state = LoginState();
 
   Stream<String> get emailErrorStream => _controller.stream.map((state) => state.emailError ).distinct();
-   Stream<String> get passwordErrorStream => _controller.stream.map((state) => state.passwordError ).distinct();
+  Stream<String> get passwordErrorStream => _controller.stream.map((state) => state.passwordError ).distinct();
   Stream<bool> get isFormValidStream => _controller.stream.map((state) => state.isFormValid ).distinct();
 
   
