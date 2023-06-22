@@ -104,7 +104,7 @@ void main() {
 
     sut.validateEmail(email);
     await Future.delayed(Duration.zero);
-    sut.validatePassword(passwora);
+    sut.validatePassword(password);
   });
 
 
