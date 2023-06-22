@@ -1,5 +1,6 @@
 import 'package:faker/faker.dart';
 import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
 import 'package:fordev/domain/usecases/authentication.dart';
 import 'package:fordev/presentation/presenters/presenters.dart';
 import 'package:fordev/presentation/protocols/validation.dart';
@@ -28,6 +29,10 @@ void main() {
 
   void mockAuthentication() {
     mockAuthenticationCall().thenAnswer((_) async => AccountEntity(faker.guid.guid()));
+  }
+
+  void mockAuthenticationError( DomainError error ) {
+    mockAuthenticationCall().thenThrow(error);
   }
 
   setUp(() {
@@ -132,6 +137,8 @@ void main() {
   });
 
 
+
+
   test('Should emit correct events on Authentication success', () async {
     sut.validateEmail(email);
     sut.validatePassword(password);
@@ -141,5 +148,31 @@ void main() {
     await sut.auth();
   });
 
+
+
+
+   test('Should emit correct events on InvalidCredentialsError', () async {
+    mockAuthenticationError(DomainError.invalidCredetials);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    
+
+    expectLater(sut.isLoadingStream, emits(false));
+    sut.mainErrorStream.listen(expectAsync1((error) => expect(error, 'Credenciais invalidas.')));
+
+    await sut.auth();
+  });
+
+
+
+  // test('Should emit correct events on Authentication success', () async {
+  //   sut.validateEmail(email);
+  //   sut.validatePassword(password);
+
+  //   expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+  //   sut.mainErrorStream.listen(expectAsync1((error) => expect(error, 'Credenciais invalidas')));
+
+  //   await sut.auth();
+  // });
 
 }
