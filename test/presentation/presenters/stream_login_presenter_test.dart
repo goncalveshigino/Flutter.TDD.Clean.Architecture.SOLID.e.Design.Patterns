@@ -14,6 +14,7 @@ class ValidationSpy extends Mock implements Validation {}
 class AuthenticationSpy extends Mock implements Authentication{}
 
 void main() {
+  
   StreamLoginPresenter sut;
   ValidationSpy validation;
   AuthenticationSpy authentication;
