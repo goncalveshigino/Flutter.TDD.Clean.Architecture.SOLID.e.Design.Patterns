@@ -31,4 +31,10 @@ void main() {
   });
 
 
+
+   test('Should return null if email is valid', () {
+    expect(sut.validate('gonza@gmail.com'), null);
+  });
+
+
 }
